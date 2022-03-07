@@ -10,19 +10,22 @@
             <li class="calc__btn"><input class="calc__btn-input calc__btn-input--div" type="submit" value="/"></li>
             <li class="calc__btn"><input class="calc__btn-input calc__btn-input--div--int" type="submit" value="Целочисленное деление"></li>
         </ul>
-        <div class="calc__exponent">
-            <label for="base">Число</label>
-            <input type="number" id="base" class="calc__input--base" v-model.number.trim="base">
-            <label for="exponent">Степень</label>
-            <input type="number" id="" class="calc__input--exponent" v-model.number.trim="exponent">
-            <input class="calc__btn-input--exp" type="submit" value="Возвести в степень">
-        </div>
+        <label for="calc__checkbox">Show keyboard</label>
+        <input type="checkbox" name="" id="calc__checkbox" v-model="checked">
+        <KeyBoard />
     </form>
 </template>
 
 <script>
+
+    import KeyBoard from './Keyboard.vue';
+
     export default {
     name: 'CalcComponent',
+
+    components: {
+        KeyBoard,
+    },
 
     data: () => {
         return {
@@ -31,6 +34,7 @@
             operand2: 0,
             base: 0,
             exponent: 0,
+            checked: true,
         }
     },
 
