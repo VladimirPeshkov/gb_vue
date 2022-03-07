@@ -4,51 +4,18 @@
         <input class="calc__operand2" type="number" v-model="operand2">
         <span class="calc__result"> = {{result}}</span>
         <ul class="calc__buttons">
-
-            <li class="calc__btn" @click="sum">
+            <li class="calc__btn" v-for="operation in operations" :key="operation">
                 <input 
-                    class="calc__btn-input calc__btn-input--sum" 
+                    class="calc__btn-input" 
                     type="submit" 
-                    value="+"
-                />
-            </li>
-            
-            <li class="calc__btn" @click="diff">
-                <input 
-                    class="calc__btn-input calc__btn-input--diff" 
-                    type="submit" 
-                    value="-"
-                />
-            </li>
-
-            <li class="calc__btn" @click="mult">
-                <input 
-                    class="calc__btn-input calc__btn-input--mult" 
-                    type="submit" 
-                    value="*"
-                />
-            </li>
-
-            <li class="calc__btn" @click="div">
-                <input 
-                    class="calc__btn-input calc__btn-input--div" 
-                    type="submit" 
-                    value="/"
-                />
-            </li>
-
-            <li class="calc__btn" @click = "getResult($event)">
-                <input 
-                    class="calc__btn-input calc__btn-input--div--int" 
-                    type="submit" 
-                    value="Целочисленное деление"
+                    :value="operation"
+                    @click="preventDefault($event), calculated(operation)"
                 />
             </li>
         </ul>
-
         <label for="checkbox">Show keyboard</label>
         <input type="checkbox" name="checkbox" id="checkbox" v-model="keyboardVisible">
-        
+
         <KeyBoard 
             v-show="keyboardVisible"
             @changeOperandInput="setOperand"
@@ -75,39 +42,33 @@
             base: 0,
             exponent: 0,
             keyboardVisible: true,
-            activeOperandInput: 'operand1'
+            activeOperandInput: 'operand1',
+            operations: ['+', '-','*','/'],
         }
     },
 
     methods: {
-        getResult(event) {
-            event.preventDefault();
-            if (event.target.classList.contains('calc__btn-input--sum')) this.result = this.operand1 + this.operand2;
-            else if (event.target.classList.contains('calc__btn-input--diff')) this.result = this.operand1 - this.operand2;
-            else if (event.target.classList.contains('calc__btn-input--mult')) this.result = this.operand1 * this.operand2;
-            else if (event.target.classList.contains('calc__btn-input--div')) this.result = this.operand1 / this.operand2;    
-            else if (event.target.classList.contains('calc__btn-input--div--int')) this.result = Math.trunc(this.operand1 / this.operand2);      
+        preventDefault(evt) {
+            if (evt.target.classList.contains('calc__btn-input')){
+                evt.preventDefault();
+            }
         },
 
-        sum(evt){
-            evt.preventDefault();
-            this.result = Number(this.operand1) + Number(this.operand2);
-        },
-        diff(evt){
-            evt.preventDefault();
-            this.result = Number(this.operand1) - Number(this.operand2);
-        },
-        mult(evt){
-            evt.preventDefault();
-            this.result = Number(this.operand1) * Number(this.operand2);
-        },
-        div(evt){
-            evt.preventDefault();
-            this.result = Number(this.operand1) / Number(this.operand2);
-        },
-        divInt(evt){
-            evt.preventDefault();
-            this.result = Math.trunc(Number(this.operand1) / Number(this.operand2));
+        calculated(operation){
+            switch(operation){
+                case '+':
+                    this.result=Number(this.operand1) + Number(this.operand2);
+                    break;
+                case '-':
+                    this.result=Number(this.operand1) - Number(this.operand2);
+                    break;
+                case '*':
+                    this.result=Number(this.operand1) * Number(this.operand2);
+                    break;
+                case '/':
+                    this.result=Number(this.operand1) / Number(this.operand2);
+                    break;
+            }
         },
 
         setOperand(operandInput){
@@ -120,9 +81,7 @@
             } else if (this.activeOperandInput === 'operand2'){
                  this.operand2 += number   
             }    
-        }
-
-
+        },
     }
 }
 </script>
